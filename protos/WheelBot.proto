@@ -1,0 +1,169 @@
+PROTO WheelBot [
+  
+]
+{
+  Robot {
+  rotation 0 1 0 -1.5707953071795862
+  children [
+    DEF WHEELBOTBODYSHAPE Transform {
+      translation 0 0.04 0
+      rotation 1 0 0 0
+      children [
+        Shape {
+          appearance DEF BODYCOLOUR PBRAppearance {
+            baseColor 0.4 0 0.3
+            metalness 0
+            IBLStrength 0.2
+          }
+          geometry DEF WHEELBOTBODY Cylinder {
+            height 0.075
+            radius 0.04
+          }
+        }
+      ]
+    }
+    DEF COMPASS Group {
+      children [
+        Transform {
+          translation 0 0.0775 0.011
+          rotation 1 0 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.7 0 0
+                metalness 0
+              }
+              geometry Cone {
+                bottomRadius 0.016
+                height 0.05
+                subdivision 14
+              }
+            }
+          ]
+        }
+        Transform {
+          translation 0 0.0775 -0.02
+          rotation 1 0 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+                metalness 0
+              }
+              geometry Capsule {
+                height 0.001
+                radius 0.017
+              }
+            }
+          ]
+        }
+      ]
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        axis -1 0 0
+        anchor 0 0.02 0
+      }
+      device [
+        RotationalMotor {
+          name "leftmotor"
+        }
+      ]
+      endPoint DEF WHEELBOTWHEEL Solid {
+        translation 6.299322153416592e-09 7.72182056288026e-06 -2.2243878013486484e-07
+        rotation -0.06332885196650906 0.028791133445667073 0.9975773289041395 3.182017282256878e-07
+        children [
+          DEF LEFTWHEELSHAPE Transform {
+            translation 0.0425 0.02 0
+            rotation 0 0 1 1.5707996938995747
+            children [
+              DEF WHEELSHAPE Shape {
+                appearance DEF WHEELCOLOR PBRAppearance {
+                  baseColor 1 0 0
+                  metalness 0
+                }
+                geometry DEF WHEELBOTWHEELSHAPE Cylinder {
+                  height 0.008
+                  radius 0.02
+                }
+              }
+            ]
+          }
+        ]
+        name "leftwheel"
+        boundingObject USE LEFTWHEELSHAPE
+        physics DEF WHEELPHYSICS Physics {
+          density -1
+          mass 0.05
+        }
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0 0.02 0
+      }
+      device [
+        RotationalMotor {
+          name "rightmotor"
+          maxTorque 30
+        }
+      ]
+      endPoint Solid {
+        translation -6.301627750958099e-09 7.72122695507152e-06 -2.2243056051023113e-07
+        rotation -0.06333272477685173 -0.02879128845070783 -0.9975770785667079 3.2373608622551644e-07
+        children [
+          DEF RIGHTWHEELSHAPE Transform {
+            translation -0.0425 0.02 0
+            rotation 0 0 1 1.5707996938995747
+            children [
+              USE WHEELSHAPE
+            ]
+          }
+        ]
+        name "rightwheel"
+        boundingObject USE RIGHTWHEELSHAPE
+        physics USE WHEELPHYSICS
+      }
+    }
+    RangeFinder {
+      translation 0 0.035 0.039
+      rotation 0 1 0 3.141592653589793
+      children [
+        DEF RFSHAPE Transform {
+          translation 0 0 -0.001
+          rotation 1 0 0 1.5707996938995747
+          children [
+            Shape {
+              appearance USE WHEELCOLOR
+              geometry Cylinder {
+                height 0.001
+                radius 0.002
+              }
+            }
+          ]
+        }
+      ]
+      name "range finder"
+      boundingObject USE RFSHAPE
+      physics Physics {
+      }
+      fieldOfView 1.5
+      width 300
+      height 200
+    }
+  ]
+  name "wheelbot"
+  boundingObject USE WHEELBOTBODYSHAPE
+  physics Physics {
+    density -1
+    mass 0.5
+    centerOfMass [
+      0 0.04 0
+    ]
+    inertiaMatrix [
+      0.0009306968236259764 0.00030159289474462024 0.0009306968236259764
+      0 0 0
+    ]
+  }
+  controller "WheelBotController"}
+}
